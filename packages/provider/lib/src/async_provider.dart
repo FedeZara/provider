@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 
 import 'provider.dart';
+import 'proxy_provider.dart';
 
 /// A callback used to build a valid value from an error.
 ///
@@ -122,6 +123,250 @@ class StreamProvider<T> extends DeferredInheritedProvider<Stream<T>?, T> {
         );
 }
 
+/// {@template provider.streamproxyprovider}
+/// A [StreamProvider] that builds and synchronizes a [Stream]
+/// with external values.
+/// {@endtemplate}
+class StreamProxyProvider0<R> extends DeferredInheritedProvider<Stream<R>?, R> {
+  /// Initializes [key] for subclasses.
+  StreamProxyProvider0({
+    Key? key,
+    Create<Stream<R>?>? create,
+    required Update<Stream<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    bool? lazy,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          lazy: lazy,
+          builder: builder,
+          create: create,
+          update: update,
+          updateShouldNotify: updateShouldNotify,
+          startListening: _streamStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.streamproxyprovider}
+class StreamProxyProvider<T, R>
+    extends DeferredInheritedProvider<Stream<R>?, R> {
+  /// Initializes [key] for subclasses.
+  StreamProxyProvider({
+    Key? key,
+    Create<Stream<R>?>? create,
+    required ProxyProviderBuilder<T, Stream<R>> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    bool? lazy,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          lazy: lazy,
+          builder: builder,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            previous,
+          ),
+          updateShouldNotify: updateShouldNotify,
+          startListening: _streamStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.streamproxyprovider}
+class StreamProxyProvider2<T, T2, R>
+    extends DeferredInheritedProvider<Stream<R>?, R> {
+  /// Initializes [key] for subclasses.
+  StreamProxyProvider2({
+    Key? key,
+    Create<Stream<R>?>? create,
+    required ProxyProviderBuilder2<T, T2, Stream<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    bool? lazy,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          lazy: lazy,
+          builder: builder,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            Provider.of(context),
+            previous,
+          ),
+          updateShouldNotify: updateShouldNotify,
+          startListening: _streamStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.streamproxyprovider}
+class StreamProxyProvider3<T, T2, T3, R>
+    extends DeferredInheritedProvider<Stream<R>?, R> {
+  /// Initializes [key] for subclasses.
+  StreamProxyProvider3({
+    Key? key,
+    Create<Stream<R>?>? create,
+    required ProxyProviderBuilder3<T, T2, T3, Stream<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    bool? lazy,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          lazy: lazy,
+          builder: builder,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            previous,
+          ),
+          updateShouldNotify: updateShouldNotify,
+          startListening: _streamStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.streamproxyprovider}
+class StreamProxyProvider4<T, T2, T3, T4, R>
+    extends DeferredInheritedProvider<Stream<R>?, R> {
+  /// Initializes [key] for subclasses.
+  StreamProxyProvider4({
+    Key? key,
+    Create<Stream<R>?>? create,
+    required ProxyProviderBuilder4<T, T2, T3, T4, Stream<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    bool? lazy,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          lazy: lazy,
+          builder: builder,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            previous,
+          ),
+          updateShouldNotify: updateShouldNotify,
+          startListening: _streamStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.streamproxyprovider}
+class StreamProxyProvider5<T, T2, T3, T4, T5, R>
+    extends DeferredInheritedProvider<Stream<R>?, R> {
+  /// Initializes [key] for subclasses.
+  StreamProxyProvider5({
+    Key? key,
+    Create<Stream<R>?>? create,
+    required ProxyProviderBuilder5<T, T2, T3, T4, T5, Stream<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    bool? lazy,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          lazy: lazy,
+          builder: builder,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            previous,
+          ),
+          updateShouldNotify: updateShouldNotify,
+          startListening: _streamStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.streamproxyprovider}
+class StreamProxyProvider6<T, T2, T3, T4, T5, T6, R>
+    extends DeferredInheritedProvider<Stream<R>?, R> {
+  /// Initializes [key] for subclasses.
+  StreamProxyProvider6({
+    Key? key,
+    Create<Stream<R>?>? create,
+    required ProxyProviderBuilder6<T, T2, T3, T4, T5, T6, Stream<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    bool? lazy,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          lazy: lazy,
+          builder: builder,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            previous,
+          ),
+          updateShouldNotify: updateShouldNotify,
+          startListening: _streamStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
 DeferredStartListening<Future<T>?, T> _futureStartListening<T>({
   required T initialData,
   ErrorBuilder<T>? catchError,
@@ -217,6 +462,244 @@ class FutureProvider<T> extends DeferredInheritedProvider<Future<T>?, T> {
           builder: builder,
           lazy: false,
           value: value,
+          updateShouldNotify: updateShouldNotify,
+          startListening: _futureStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@template provider.futureproxyprovider}
+/// A [FutureProvider] that builds and synchronizes a [Future]
+/// with external values.
+/// {@endtemplate}
+class FutureProxyProvider0<R> extends DeferredInheritedProvider<Future<R>?, R> {
+  /// Initializes [key] for subclasses.
+  FutureProxyProvider0({
+    Key? key,
+    Create<Future<R>?>? create,
+    required Update<Future<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    bool? lazy,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          builder: builder,
+          lazy: lazy,
+          create: create,
+          update: update,
+          updateShouldNotify: updateShouldNotify,
+          startListening: _futureStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.futureproxyprovider}
+class FutureProxyProvider<T, R>
+    extends DeferredInheritedProvider<Future<R>?, R> {
+  /// Initializes [key] for subclasses.
+  FutureProxyProvider({
+    Key? key,
+    Create<Future<R>?>? create,
+    required ProxyProviderBuilder<T, Future<R>> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          builder: builder,
+          lazy: false,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            previous,
+          ),
+          updateShouldNotify: updateShouldNotify,
+          startListening: _futureStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.futureproxyprovider}
+class FutureProxyProvider2<T, T2, R>
+    extends DeferredInheritedProvider<Future<R>?, R> {
+  /// Initializes [key] for subclasses.
+  FutureProxyProvider2({
+    Key? key,
+    Create<Future<R>?>? create,
+    required ProxyProviderBuilder2<T, T2, Future<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          builder: builder,
+          lazy: false,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            Provider.of(context),
+            previous,
+          ),
+          updateShouldNotify: updateShouldNotify,
+          startListening: _futureStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.futureproxyprovider}
+class FutureProxyProvider3<T, T2, T3, R>
+    extends DeferredInheritedProvider<Future<R>?, R> {
+  /// Initializes [key] for subclasses.
+  FutureProxyProvider3({
+    Key? key,
+    Create<Future<R>?>? create,
+    required ProxyProviderBuilder3<T, T2, T3, Future<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          builder: builder,
+          lazy: false,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            previous,
+          ),
+          updateShouldNotify: updateShouldNotify,
+          startListening: _futureStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.futureproxyprovider}
+class FutureProxyProvider4<T, T2, T3, T4, R>
+    extends DeferredInheritedProvider<Future<R>?, R> {
+  /// Initializes [key] for subclasses.
+  FutureProxyProvider4({
+    Key? key,
+    Create<Future<R>?>? create,
+    required ProxyProviderBuilder4<T, T2, T3, T4, Future<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          builder: builder,
+          lazy: false,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            previous,
+          ),
+          updateShouldNotify: updateShouldNotify,
+          startListening: _futureStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.futureproxyprovider}
+class FutureProxyProvider5<T, T2, T3, T4, T5, R>
+    extends DeferredInheritedProvider<Future<R>?, R> {
+  /// Initializes [key] for subclasses.
+  FutureProxyProvider5({
+    Key? key,
+    Create<Future<R>?>? create,
+    required ProxyProviderBuilder5<T, T2, T3, T4, T5, Future<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          builder: builder,
+          lazy: false,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            previous,
+          ),
+          updateShouldNotify: updateShouldNotify,
+          startListening: _futureStartListening(
+            catchError: catchError,
+            initialData: initialData,
+          ),
+          child: child,
+        );
+}
+
+/// {@macro provider.futureproxyprovider}
+class FutureProxyProvider6<T, T2, T3, T4, T5, T6, R>
+    extends DeferredInheritedProvider<Future<R>?, R> {
+  /// Initializes [key] for subclasses.
+  FutureProxyProvider6({
+    Key? key,
+    Create<Future<R>?>? create,
+    required ProxyProviderBuilder6<T, T2, T3, T4, T5, T6, Future<R>?> update,
+    required R initialData,
+    ErrorBuilder<R>? catchError,
+    UpdateShouldNotify<R>? updateShouldNotify,
+    TransitionBuilder? builder,
+    Widget? child,
+  }) : super(
+          key: key,
+          builder: builder,
+          lazy: false,
+          create: create,
+          update: (context, previous) => update(
+            context,
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            Provider.of(context),
+            previous,
+          ),
           updateShouldNotify: updateShouldNotify,
           startListening: _futureStartListening(
             catchError: catchError,

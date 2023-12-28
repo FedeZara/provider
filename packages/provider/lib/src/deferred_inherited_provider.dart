@@ -34,7 +34,8 @@ class DeferredInheritedProvider<T, R> extends InheritedProvider<R> {
   /// will be exposed to `child` and its descendants.
   DeferredInheritedProvider({
     Key? key,
-    required Create<T> create,
+    Create<T>? create,
+    Update<T>? update,
     Dispose<T>? dispose,
     required DeferredStartListening<T, R> startListening,
     UpdateShouldNotify<R>? updateShouldNotify,
@@ -48,6 +49,7 @@ class DeferredInheritedProvider<T, R> extends InheritedProvider<R> {
           builder: builder,
           delegate: _CreateDeferredInheritedProvider(
             create: create,
+            update: update,
             dispose: dispose,
             updateShouldNotify: updateShouldNotify,
             startListening: startListening,
@@ -158,13 +160,16 @@ DeferredInheritedProvider(
 
 class _CreateDeferredInheritedProvider<T, R> extends _DeferredDelegate<T, R> {
   _CreateDeferredInheritedProvider({
-    required this.create,
+    this.create,
+    this.update,
     this.dispose,
     UpdateShouldNotify<R>? updateShouldNotify,
     required DeferredStartListening<T, R> startListening,
-  }) : super(updateShouldNotify, startListening);
+  })  : assert(create != null || update != null),
+        super(updateShouldNotify, startListening);
 
-  final Create<T> create;
+  final Create<T>? create;
+  final Update<T>? update;
   final Dispose<T>? dispose;
 
   @override
@@ -179,39 +184,48 @@ class _CreateDeferredInheritedProviderElement<T, R>
   bool _didBuild = false;
 
   T? _controller;
+  _CreateDeferredInheritedProvider<T, R>? _previousWidget;
 
   @override
   T get controller {
     if (!_didBuild) {
-      assert(debugSetInheritedLock(true));
-      bool? _debugPreviousIsInInheritedProviderCreate;
-      bool? _debugPreviousIsInInheritedProviderUpdate;
-
-      assert(() {
-        _debugPreviousIsInInheritedProviderCreate =
-            debugIsInInheritedProviderCreate;
-        _debugPreviousIsInInheritedProviderUpdate =
-            debugIsInInheritedProviderUpdate;
-        return true;
-      }());
-
-      try {
-        assert(() {
-          debugIsInInheritedProviderCreate = true;
-          debugIsInInheritedProviderUpdate = false;
-          return true;
-        }());
-        _controller = delegate.create(element!);
-      } finally {
-        assert(() {
-          debugIsInInheritedProviderCreate =
-              _debugPreviousIsInInheritedProviderCreate!;
-          debugIsInInheritedProviderUpdate =
-              _debugPreviousIsInInheritedProviderUpdate!;
-          return true;
-        }());
-      }
       _didBuild = true;
+      if (delegate.create != null) {
+        assert(debugSetInheritedLock(true));
+        bool? _debugPreviousIsInInheritedProviderCreate;
+        bool? _debugPreviousIsInInheritedProviderUpdate;
+
+        assert(() {
+          _debugPreviousIsInInheritedProviderCreate =
+              debugIsInInheritedProviderCreate;
+          _debugPreviousIsInInheritedProviderUpdate =
+              debugIsInInheritedProviderUpdate;
+          return true;
+        }());
+
+        try {
+          assert(() {
+            debugIsInInheritedProviderCreate = true;
+            debugIsInInheritedProviderUpdate = false;
+            return true;
+          }());
+          _controller = delegate.create!(element!);
+        } finally {
+          assert(() {
+            debugIsInInheritedProviderCreate =
+                _debugPreviousIsInInheritedProviderCreate!;
+            debugIsInInheritedProviderUpdate =
+                _debugPreviousIsInInheritedProviderUpdate!;
+            return true;
+          }());
+        }
+
+        assert(debugSetInheritedLock(false));
+      }
+
+      if (delegate.update != null) {
+        _performUpdate(dispose: delegate.dispose);
+      }
     }
     return _controller as T;
   }
@@ -249,6 +263,77 @@ class _CreateDeferredInheritedProviderElement<T, R>
             ifTrue: '<not yet loaded>',
           ),
         );
+    }
+  }
+
+  @override
+  void build({required bool isBuildFromExternalSources}) {
+    // Don't call `update` unless the build was triggered from `updated`/`didChangeDependencies`
+    // otherwise `markNeedsNotifyDependents` will trigger unnecessary `update` calls
+    if (isBuildFromExternalSources && _didBuild && delegate.update != null) {
+      _performUpdate(dispose: _previousWidget?.dispose);
+
+      // Notify dependents if the value changed
+      final previousValue = _value as R;
+      final newValue = value;
+
+      bool shouldNotify;
+      if (delegate.updateShouldNotify != null) {
+        shouldNotify = delegate.updateShouldNotify!(
+          previousValue,
+          newValue,
+        );
+      } else {
+        shouldNotify = _value != previousValue;
+      }
+
+      if (shouldNotify) {
+        element!._shouldNotifyDependents = true;
+      }
+    }
+
+    _previousWidget = delegate;
+    return super.build(isBuildFromExternalSources: isBuildFromExternalSources);
+  }
+
+  void _performUpdate({required void Function(BuildContext, T)? dispose}) {
+    final previousController = _controller;
+
+    bool? _debugPreviousIsInInheritedProviderCreate;
+    bool? _debugPreviousIsInInheritedProviderUpdate;
+    assert(() {
+      _debugPreviousIsInInheritedProviderCreate =
+          debugIsInInheritedProviderCreate;
+      _debugPreviousIsInInheritedProviderUpdate =
+          debugIsInInheritedProviderUpdate;
+      return true;
+    }());
+    try {
+      assert(() {
+        debugIsInInheritedProviderCreate = false;
+        debugIsInInheritedProviderUpdate = true;
+        return true;
+      }());
+      _controller = delegate.update!(element!, _controller);
+    } finally {
+      assert(() {
+        debugIsInInheritedProviderCreate =
+            _debugPreviousIsInInheritedProviderCreate!;
+        debugIsInInheritedProviderUpdate =
+            _debugPreviousIsInInheritedProviderUpdate!;
+        return true;
+      }());
+    }
+
+    if (_controller != previousController) {
+      if (_removeListener != null) {
+        _removeListener!();
+        _removeListener = null;
+      }
+
+      if (dispose != null && previousController != null) {
+        dispose(element!, previousController);
+      }
     }
   }
 }

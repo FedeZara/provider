@@ -13,13 +13,24 @@ typedef UpdateShouldNotify<T> = bool Function(T previous, T current);
 /// See also:
 ///
 ///  * [Dispose], to free the resources associated to the value created.
+///  * [Update], to update an object of type [T].
 typedef Create<T> = T Function(BuildContext context);
+
+/// A function that updates an object of type [T] based on the
+/// previous value.
+///
+/// See also:
+///
+///  * [Create], to create a value that will later be updated.
+///  * [Dispose], to free the resources associated to the value updated.
+typedef Update<T> = T Function(BuildContext context, T? value);
 
 /// A function that disposes an object of type [T].
 ///
 /// See also:
 ///
 ///  * [Create], to create a value that will later be disposed of.
+///  * [Update], to update an object of type [T].
 typedef Dispose<T> = void Function(BuildContext context, T value);
 
 /// A callback used to start the listening of an object and return a function

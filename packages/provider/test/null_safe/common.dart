@@ -73,6 +73,22 @@ class ValueBuilderMock<T> extends Mock {
   }
 }
 
+class StreamValueBuilderMock<T> extends Mock {
+  StreamValueBuilderMock(this._value) {
+    when(this(any, any)).thenAnswer((_) => _value);
+  }
+
+  final T _value;
+
+  T call(BuildContext? context, T? previous) {
+    return super.noSuchMethod(
+      Invocation.method(#call, [context, previous]),
+      returnValue: _value,
+      returnValueForMissingStub: _value,
+    ) as T;
+  }
+}
+
 class TransitionBuilderMock extends Mock {
   TransitionBuilderMock([Widget Function(BuildContext c, Widget child)? cb]) {
     if (cb != null) {

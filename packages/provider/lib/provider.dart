@@ -1,7 +1,24 @@
 library provider;
 
 export 'src/async_provider.dart'
-    show FutureProvider, StreamProvider, ErrorBuilder;
+    show
+        FutureProvider,
+        FutureProxyProvider,
+        FutureProxyProvider0,
+        FutureProxyProvider2,
+        FutureProxyProvider3,
+        FutureProxyProvider4,
+        FutureProxyProvider5,
+        FutureProxyProvider6,
+        StreamProvider,
+        StreamProxyProvider,
+        StreamProxyProvider0,
+        StreamProxyProvider2,
+        StreamProxyProvider3,
+        StreamProxyProvider4,
+        StreamProxyProvider5,
+        StreamProxyProvider6,
+        ErrorBuilder;
 export 'src/change_notifier_provider.dart'
     show
         ChangeNotifierProvider,
@@ -35,6 +52,7 @@ export 'src/provider.dart'
         ProviderNotFoundException,
         ProviderNullException,
         Create,
+        Update,
         DeferredStartListening,
         Dispose,
         Locator,
