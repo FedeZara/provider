@@ -689,6 +689,85 @@ DeferredInheritedProvider<int, int>(controller: 42, value: 24)'''),
     });
   });
 
+  testWidgets(
+    'selector not reachable after update does not throw',
+    (tester) async {
+      final child = Builder(
+        builder: (context) {
+          final foo = context.select<Map<String, dynamic>, bool>(
+            (value) => value['foo'] as bool,
+          );
+          if (!foo) {
+            return Container();
+          } else {
+            return Builder(
+              builder: (context) {
+                final bar = context.select<Map<String, dynamic>, String>(
+                  (value) => value['bar'] as String,
+                );
+                return Text(
+                  bar,
+                  textDirection: TextDirection.ltr,
+                );
+              },
+            );
+          }
+        },
+      );
+
+      await tester.pumpWidget(
+        InheritedProvider<Map<String, dynamic>>.value(
+          value: const {'foo': true, 'bar': '42'},
+          child: child,
+        ),
+      );
+
+      expect(find.text('42'), findsOneWidget);
+
+      await tester.pumpWidget(
+        InheritedProvider<Map<String, dynamic>>.value(
+          value: const {'foo': false, 'bar': null},
+          child: child,
+        ),
+      );
+    },
+  );
+
+  testWidgets(
+    'selector reachable after update does throw',
+    (tester) async {
+      final child = Builder(
+        builder: (context) {
+          final bar = context.select<Map<String, dynamic>, String>(
+            (value) => value['bar'] as String,
+          );
+          return Text(
+            bar,
+            textDirection: TextDirection.ltr,
+          );
+        },
+      );
+
+      await tester.pumpWidget(
+        InheritedProvider<Map<String, dynamic>>.value(
+          value: const {'foo': true, 'bar': '42'},
+          child: child,
+        ),
+      );
+
+      expect(find.text('42'), findsOneWidget);
+
+      await tester.pumpWidget(
+        InheritedProvider<Map<String, dynamic>>.value(
+          value: const {'foo': false, 'bar': null},
+          child: child,
+        ),
+      );
+
+      expect(tester.takeException(), isA<TypeError>());
+    },
+  );
+
   group('InheritedProvider.value()', () {
     testWidgets('markNeedsNotifyDependents during startListening is noop',
         (tester) async {

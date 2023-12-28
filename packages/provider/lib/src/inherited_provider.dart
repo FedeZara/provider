@@ -290,6 +290,19 @@ Any usage other than inside the `build` method of a widget are not supported.
               throw ProviderNullException(T, widget.runtimeType);
             }
 
+            R? newSelected;
+            try {
+              newSelected = selector(newValue);
+            } catch (_) {}
+
+            // If the selector threw, we notify dependents.
+            // In this way, if the widget is rebuilt, the selector will be
+            // called again, and the error will be thrown again.
+            // If the widget is not rebuilt, then the error is ignored.
+            if (newSelected == null) {
+              return true;
+            }
+
             return !const DeepCollectionEquality()
                 .equals(selector(newValue), selected);
           },
