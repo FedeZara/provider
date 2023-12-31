@@ -1,3 +1,11 @@
+## Unreleased major
+
+- Now `DeferredInheritedProvider` also accepts an update operation very similar to `InheritedProvider`'s.
+  The update operation is called immediately after the create operation and after every rebuild of the provider 
+  triggered by `updated`/`didChangeDependencies`.
+- Thanks to the above update, it was possible to implement proxy providers for `StreamProvider` 
+  and `FutureProvider`.
+
 ## 6.1.1
 
 - Fix missing devtool assets
