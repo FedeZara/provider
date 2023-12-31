@@ -322,7 +322,7 @@ It comes under multiple variations, such as:
   That digit after the class name is the number of other providers that
   `ProxyProvider` depends on.
 
-- `ProxyProvider` vs `ChangeNotifierProxyProvider` vs `ListenableProxyProvider`, ...
+- `ProxyProvider` vs `ChangeNotifierProxyProvider` vs `ListenableProxyProvider` vs `StreamProxyProvider` vs `FutureProxyProvider`, ...
 
   They all work similarly, but instead of sending the result into a `Provider`,
   a `ChangeNotifierProxyProvider` will send its value to a `ChangeNotifierProvider`.
