@@ -1,3 +1,8 @@
+## Unreleased minor
+
+- Selector in context.select(...) now only throws when 
+  rebuilding the UI and not when checking for updates
+
 ## 6.1.1
 
 - Fix missing devtool assets
