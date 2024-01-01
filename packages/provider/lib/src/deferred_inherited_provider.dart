@@ -271,24 +271,28 @@ class _CreateDeferredInheritedProviderElement<T, R>
     // Don't call `update` unless the build was triggered from `updated`/`didChangeDependencies`
     // otherwise `markNeedsNotifyDependents` will trigger unnecessary `update` calls
     if (isBuildFromExternalSources && _didBuild && delegate.update != null) {
+      final startedListening = _removeListener != null;
+
       _performUpdate(dispose: _previousWidget?.dispose);
 
-      // Notify dependents if the value changed
-      final previousValue = _value as R;
-      final newValue = value;
+      if (startedListening) {
+        // Notify dependents if the value changed
+        final previousValue = _value as R;
+        final newValue = value;
 
-      bool shouldNotify;
-      if (delegate.updateShouldNotify != null) {
-        shouldNotify = delegate.updateShouldNotify!(
-          previousValue,
-          newValue,
-        );
-      } else {
-        shouldNotify = _value != previousValue;
-      }
+        bool shouldNotify;
+        if (delegate.updateShouldNotify != null) {
+          shouldNotify = delegate.updateShouldNotify!(
+            previousValue,
+            newValue,
+          );
+        } else {
+          shouldNotify = newValue != previousValue;
+        }
 
-      if (shouldNotify) {
-        element!._shouldNotifyDependents = true;
+        if (shouldNotify) {
+          element!._shouldNotifyDependents = true;
+        }
       }
     }
 

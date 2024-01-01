@@ -2449,7 +2449,7 @@ DeferredInheritedProvider<int, int>(controller: 42, value: 24)'''),
     });
 
     testWidgets(
-      "stopListening not called twice if rebuild doesn't have listeners",
+      "startListening and stopListening not called if update doesn't have listeners",
       (tester) async {
         final stopListening = StopListeningMock();
         final startListening =
@@ -2466,13 +2466,11 @@ DeferredInheritedProvider<int, int>(controller: 42, value: 24)'''),
           DeferredInheritedProvider<ValueNotifier<int>, int>(
             update: (_, __) => valueNotifier,
             startListening: startListening,
-            child: TextOf<int>(),
+            child: Container(),
           ),
         );
 
-        verify(startListening(
-                argThat(isNotNull), argThat(isNotNull), valueNotifier, null))
-            .called(1);
+        verifyZeroInteractions(startListening);
         verifyZeroInteractions(stopListening);
 
         final stopListening2 = StopListeningMock();
@@ -2494,15 +2492,13 @@ DeferredInheritedProvider<int, int>(controller: 42, value: 24)'''),
           ),
         );
 
-        verifyNoMoreInteractions(startListening);
-        verify(stopListening()).called(1);
         verifyZeroInteractions(startListening2);
         verifyZeroInteractions(stopListening2);
 
         await tester.pumpWidget(Container());
 
-        verifyNoMoreInteractions(startListening);
-        verifyNoMoreInteractions(stopListening);
+        verifyZeroInteractions(startListening);
+        verifyZeroInteractions(stopListening);
         verifyZeroInteractions(startListening2);
         verifyZeroInteractions(stopListening2);
       },
